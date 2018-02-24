@@ -143,7 +143,7 @@ module Cosmos
         # Expect 1 parameter
         parser.verify_num_parameters(1, 1, "X_VALUE_TYPE <RAW or CONVERTED>")
         value_type = parameters[0].upcase.intern
-        if VALUE_TYPES.include?(value_type)
+        if self.class::VALUE_TYPES.include?(value_type)
           @x_value_type = value_type
         else
           raise ArgumentError, "Unknown X_VALUE_TYPE value: #{value_type}"
@@ -153,7 +153,7 @@ module Cosmos
         # Expect 1 parameter
         parser.verify_num_parameters(1, 1, "Y_VALUE_TYPE <RAW or CONVERTED>")
         value_type = parameters[0].upcase.intern
-        if VALUE_TYPES.include?(value_type)
+        if self.class::VALUE_TYPES.include?(value_type)
           @y_value_type = value_type
         else
           raise ArgumentError, "Unknown Y_VALUE_TYPE value: #{value_type}"
