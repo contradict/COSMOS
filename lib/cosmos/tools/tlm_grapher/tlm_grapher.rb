@@ -31,9 +31,9 @@ module Cosmos
           options.title = "Telemetry Grapher"
           options.tool_short_name = 'tlmgrapher'
           options.tabbed_plots_type = 'overview'
-          options.data_object_types = ['HOUSEKEEPING', 'XY','SINGLEXY']
+          options.data_object_types = ['HOUSEKEEPING', 'XY', 'ARRAY', 'SINGLEXY']
           options.plot_types = ['LINEGRAPH', 'XY','SINGLEXY']
-          options.plot_type_to_data_object_type_mapping = {'LINEGRAPH' => ['HOUSEKEEPING'], 'XY' => ['XY'], 'SINGLEXY' => ['SINGLEXY']}
+          options.plot_type_to_data_object_type_mapping = {'LINEGRAPH' => ['HOUSEKEEPING'], 'XY' => ['XY', 'ARRAY'], 'SINGLEXY' => ['SINGLEXY']}
           options.adder_types = ['HOUSEKEEPING']
           options.adder_orientation = Qt::Horizontal
           options.items = []

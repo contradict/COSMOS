@@ -13,6 +13,7 @@ require 'cosmos/tools/tlm_grapher/data_object_editors/data_object_editor'
 require 'cosmos/tools/tlm_grapher/data_object_editors/linegraph_data_object_editor'
 require 'cosmos/tools/tlm_grapher/data_object_editors/housekeeping_data_object_editor'
 require 'cosmos/tools/tlm_grapher/data_object_editors/xy_data_object_editor'
+require 'cosmos/tools/tlm_grapher/data_object_editors/array_data_object_editor'
 require 'cosmos/tools/tlm_grapher/data_object_editors/singlexy_data_object_editor'
 
 module Cosmos

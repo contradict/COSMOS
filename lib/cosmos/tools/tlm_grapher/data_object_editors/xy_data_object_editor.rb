@@ -80,13 +80,13 @@ module Cosmos
       @local_layout.addWidget(@time_item_name)
 
       # Chooser for y value type
-      value_types = XyDataObject::VALUE_TYPES.clone
+      value_types = @data_object_class::VALUE_TYPES.clone
       @y_value_type = ComboboxChooser.new(self, '*Y Value Type:', value_types)
       @y_value_type.set_current(data_object.y_value_type.to_s) if data_object.y_value_type
       @local_layout.addWidget(@y_value_type)
 
       # Chooser for x value type
-      value_types = XyDataObject::VALUE_TYPES.clone
+      value_types = @data_object_class::VALUE_TYPES.clone
       @x_value_type = ComboboxChooser.new(self, '*X Value Type:', value_types)
       @x_value_type.set_current(data_object.x_value_type.to_s) if data_object.x_value_type
       @local_layout.addWidget(@x_value_type)
@@ -147,11 +147,11 @@ module Cosmos
       data_object.y_item_name = @telemetry_chooser.item_name
       data_object.x_item_name = x_item_names[0]
       data_object.time_item_name = time_item_names[0] if @time_item_name
-      value_types = XyDataObject::VALUE_TYPES.clone
+      value_types = @data_object_class::VALUE_TYPES.clone
       value_types.delete(data_object.y_value_type)
       value_types.unshift(data_object.y_value_type)
       @y_value_type.update_items(value_types, false)
-      value_types = XyDataObject::VALUE_TYPES.clone
+      value_types = @data_object_class::VALUE_TYPES.clone
       value_types.delete(data_object.x_value_type)
       value_types.unshift(data_object.x_value_type)
       @x_value_type.update_items(value_types, false)
@@ -171,7 +171,7 @@ module Cosmos
       data_object.target_name = @telemetry_chooser.target_name
       data_object.packet_name = @telemetry_chooser.packet_name
       data_object.y_item_name = @telemetry_chooser.item_name
-      value_types = XyDataObject::VALUE_TYPES.clone
+      value_types = @data_object_class::VALUE_TYPES.clone
       value_types.delete(data_object.y_value_type)
       value_types.unshift(data_object.y_value_type)
       @y_value_type.update_items(value_types, false)
@@ -190,7 +190,7 @@ module Cosmos
       if string and !string.empty?
         data_object = get_data_object()
         data_object.x_item_name = string
-        value_types = XyDataObject::VALUE_TYPES.clone
+        value_types = @data_object_class::VALUE_TYPES.clone
         value_types.delete(data_object.x_value_type)
         value_types.unshift(data_object.x_value_type)
         @x_value_type.update_items(value_types, false)

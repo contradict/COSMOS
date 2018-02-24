@@ -45,20 +45,31 @@ module Cosmos
     def update_plot(points_plotted, min_x_value, max_x_value, single = false)
       self.clear_lines
       @plot.data_objects.each do |data_object|
-        unless data_object.time_values.empty?
+        if data_object.is_a?(ArrayDataObject)
           begin
-            raise "LineGraph time data must be Numeric" unless data_object.time_values[0].kind_of?(Numeric)
-            range = data_object.time_values.range_within(min_x_value, max_x_value)
-            range = (range.last)..(range.last) if single
-            time_values = data_object.time_values[range]
-            if time_values[0] and time_values[0] >= min_x_value and time_values[0] <= max_x_value
-              x_values = data_object.x_values[range]
-              y_values = data_object.y_values[range]
-              self.add_line(data_object.name, y_values, x_values, nil, nil, data_object.y_states, data_object.x_states, data_object.color, :LEFT, points_plotted) unless y_values.empty?
-            end
+            x_values = data_object.x_values
+            y_values = data_object.y_values
+            self.add_line(data_object.name, y_values, x_values, nil, nil, data_object.y_states, data_object.x_states, data_object.color, :LEFT, points_plotted) unless y_values.empty?
           rescue Exception => error
             raise error if error.class == NoMemoryError
             self.error = error unless self.error
+          end
+        elsif data_object.is_a?(XyDataObject)
+          unless data_object.time_values.empty?
+            begin
+              raise "LineGraph time data must be Numeric" unless data_object.time_values[0].kind_of?(Numeric)
+              range = data_object.time_values.range_within(min_x_value, max_x_value)
+              range = (range.last)..(range.last) if single
+              time_values = data_object.time_values[range]
+              if time_values[0] and time_values[0] >= min_x_value and time_values[0] <= max_x_value
+                x_values = data_object.x_values[range]
+                y_values = data_object.y_values[range]
+                self.add_line(data_object.name, y_values, x_values, nil, nil, data_object.y_states, data_object.x_states, data_object.color, :LEFT, points_plotted) unless y_values.empty?
+              end
+            rescue Exception => error
+              raise error if error.class == NoMemoryError
+              self.error = error unless self.error
+            end
           end
         end
         if data_object.error
