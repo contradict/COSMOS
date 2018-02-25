@@ -91,6 +91,12 @@ module Cosmos
       @x_value_type.set_current(data_object.x_value_type.to_s) if data_object.x_value_type
       @local_layout.addWidget(@x_value_type)
 
+      # Chooser for side
+      sides = @data_object_class::SIDES.clone
+      @side = ComboboxChooser.new(self, 'Axis side:', sides)
+      @side.set_current(data_object.side.to_s) if data_object.side
+      @local_layout.addWidget(@side)
+
       @layout.insertLayout(0, @local_layout)
     end
 
@@ -112,6 +118,7 @@ module Cosmos
       end
       data_object.y_value_type = @y_value_type.symbol
       data_object.x_value_type = @x_value_type.symbol
+      data_object.side = @side.symbol
       data_object
     end
 

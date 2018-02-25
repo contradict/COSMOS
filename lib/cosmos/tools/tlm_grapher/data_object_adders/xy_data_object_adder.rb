@@ -50,6 +50,11 @@ module Cosmos
       @x_item_name.set_current('RECEIVED_TIMESECONDS')
       @overall_frame.addWidget(@x_item_name)
 
+      # Chooser for side
+      @side = ComboboxChooser.new(self, 'Axis Side:', XyDataObject::SIDES)
+      @side.set_current(':LEFT')
+      @overall_frame.addWidget(@side)
+
       # Button to add data object
       @add_data_object_button = Qt::PushButton.new('Add XY Data Object')
       @add_data_object_button.connect(SIGNAL('clicked()')) do
@@ -77,6 +82,7 @@ module Cosmos
       data_object.packet_name = @telemetry_chooser.packet_name
       data_object.y_item_name = @telemetry_chooser.item_name
       data_object.x_item_name = @x_item_name.string
+      data_object.side = @side.symbol
 
       @add_data_object_callback.call(data_object) if @add_data_object_callback
     end

@@ -18,6 +18,8 @@ module Cosmos
     # Value Types
     VALUE_TYPES = [:RAW, :CONVERTED]
 
+    SIDES = [:LEFT, :RIGHT]
+
     # The target name (string)
     attr_accessor :target_name
 
@@ -54,6 +56,9 @@ module Cosmos
     # Hash of y states
     attr_accessor :y_states
 
+    # Which side axis to plot with
+    attr_accessor :side
+
     def initialize
       super()
 
@@ -70,6 +75,7 @@ module Cosmos
       @time_values = LowFragmentationArray.new(DEFAULT_ARRAY_SIZE)
       @x_states = nil
       @y_states = nil
+      @side = :LEFT
 
       @during_configuration = false
     end
@@ -84,6 +90,7 @@ module Cosmos
       string << "      TIME_ITEM #{@time_item_name}\n" if @time_item_name
       string << "      X_VALUE_TYPE #{@x_value_type}\n"
       string << "      Y_VALUE_TYPE #{@y_value_type}\n"
+      string << "      SIDE #{@side}\n"
       string
     end # def configuration_string
 
@@ -157,6 +164,16 @@ module Cosmos
           @y_value_type = value_type
         else
           raise ArgumentError, "Unknown Y_VALUE_TYPE value: #{value_type}"
+        end
+
+      when 'SIDE'
+        # Expect 1 parameter
+        parser.verify_num_parameters(1, 1, "SIDE <LEFT or RIGHT>")
+        side = parameters[0].upcase.intern
+        if self.class::SIDES.include?(side)
+          @side = side
+        else
+          raise ArgumentError, "Unknown SIDE value: #{side}"
         end
 
       else
@@ -245,6 +262,7 @@ module Cosmos
       data_object.time_item_name = @time_item_name.clone if @time_item_name
       data_object.x_value_type = @x_value_type
       data_object.y_value_type = @y_value_type
+      data_object.side = @side
       data_object
     end
 
@@ -258,7 +276,8 @@ module Cosmos
          @y_item_name != edited_data_object.y_item_name or
          @time_item_name != edited_data_object.time_item_name or
          @x_value_type != edited_data_object.x_value_type or
-         @y_value_type != edited_data_object.y_value_type
+         @y_value_type != edited_data_object.y_value_type or
+         @side != edited_data_object.side
         false
       else
         super(edited_data_object)
@@ -295,6 +314,10 @@ module Cosmos
     def time_item_name=(time_item_name)
       @time_item_name = time_item_name
       System.telemetry.packet_and_item(@target_name, @packet_name, @time_item_name)
+    end
+
+    def side=(side)
+      @side = side
     end
 
     protected
