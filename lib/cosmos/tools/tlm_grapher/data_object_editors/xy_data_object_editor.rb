@@ -91,6 +91,7 @@ module Cosmos
       @x_value_type.set_current(data_object.x_value_type.to_s) if data_object.x_value_type
       @local_layout.addWidget(@x_value_type)
 
+
       # Chooser for dart reduction
       @dart_reduction = ComboboxChooser.new(self, '*DART Reduction:', XyDataObject::DART_REDUCTIONS.map {|x| x.to_s})
       @dart_reduction.set_current(data_object.dart_reduction.to_s) if data_object.dart_reduction
@@ -100,6 +101,13 @@ module Cosmos
       @dart_reduced_type = ComboboxChooser.new(self, '*DART Reduced Type:', XyDataObject::DART_REDUCED_TYPES.map {|x| x.to_s})
       @dart_reduced_type.set_current(data_object.dart_reduced_type.to_s) if data_object.dart_reduced_type
       @local_layout.addWidget(@dart_reduced_type)
+
+      # Chooser for side
+      sides = @data_object_class::SIDES.clone
+      @side = ComboboxChooser.new(self, 'Axis side:', sides)
+      @side.set_current(data_object.side.to_s) if data_object.side
+      @local_layout.addWidget(@side)
+
 
       @layout.insertLayout(0, @local_layout)
     end
@@ -124,6 +132,7 @@ module Cosmos
       data_object.x_value_type = @x_value_type.symbol
       data_object.dart_reduction = @dart_reduction.symbol
       data_object.dart_reduced_type = @dart_reduced_type.symbol
+      data_object.side = @side.symbol
       data_object
     end
 

@@ -23,6 +23,7 @@ module Cosmos
 
     # DART Reduced Types
     DART_REDUCED_TYPES = [:AVG, :MIN, :MAX, :STDDEV]
+    SIDES = [:LEFT, :RIGHT]
 
     # The target name (string)
     attr_accessor :target_name
@@ -66,6 +67,9 @@ module Cosmos
     # Hash of y states
     attr_accessor :y_states
 
+    # Which side axis to plot with
+    attr_accessor :side
+
     def initialize
       super()
 
@@ -84,6 +88,7 @@ module Cosmos
       @time_values = LowFragmentationArray.new(DEFAULT_ARRAY_SIZE)
       @x_states = nil
       @y_states = nil
+      @side = :LEFT
 
       @during_configuration = false
     end
@@ -100,6 +105,7 @@ module Cosmos
       string << "      Y_VALUE_TYPE #{@y_value_type}\n"
       string << "      DART_REDUCTION #{@dart_reduction}\n"
       string << "      DART_REDUCED_TYPE #{@dart_reduced_type}\n"
+      string << "      SIDE #{@side}\n"
       string
     end # def configuration_string
 
@@ -175,7 +181,7 @@ module Cosmos
           raise ArgumentError, "Unknown Y_VALUE_TYPE value: #{value_type}"
         end
 
-        when 'DART_REDUCTION'
+      when 'DART_REDUCTION'
           # Expect 1 parameter
           parser.verify_num_parameters(1, 1, "DART_REDUCTION <NONE, MINUTE, HOUR, DAY>")
           dart_reduction = parameters[0].upcase.intern
@@ -185,7 +191,7 @@ module Cosmos
             raise ArgumentError, "Unknown DART_REDUCTION value: #{dart_reduction}"
           end
 
-        when 'DART_REDUCED_TYPE'
+      when 'DART_REDUCED_TYPE'
           # Expect 1 parameter
           parser.verify_num_parameters(1, 1, "DART_REDUCED_TYPE <AVG, MIN, MAX, STDDEV>")
           dart_reduced_type = parameters[0].upcase.intern
@@ -194,6 +200,15 @@ module Cosmos
           else
             raise ArgumentError, "Unknown DART_REDUCED_TYPE value: #{dart_reduced_type}"
           end
+      when 'SIDE'
+        # Expect 1 parameter
+        parser.verify_num_parameters(1, 1, "SIDE <LEFT or RIGHT>")
+        side = parameters[0].upcase.intern
+        if self.class::SIDES.include?(side)
+          @side = side
+        else
+          raise ArgumentError, "Unknown SIDE value: #{side}"
+        end
 
       else
         # Unknown keywords are passed to parent data object
@@ -306,6 +321,7 @@ module Cosmos
       data_object.y_value_type = @y_value_type
       data_object.dart_reduction = @dart_reduction
       data_object.dart_reduced_type = @dart_reduced_type
+      data_object.side = @side
       data_object
     end
 
@@ -321,7 +337,8 @@ module Cosmos
          @x_value_type != edited_data_object.x_value_type or
          @y_value_type != edited_data_object.y_value_type or
          @dart_reduction != edited_data_object.dart_reduction or
-         @dart_reduced_type != edited_data_object.dart_reduced_type
+         @dart_reduced_type != edited_data_object.dart_reduced_type or
+         @side != edited_data_object.side
         false
       else
         super(edited_data_object)
@@ -358,6 +375,10 @@ module Cosmos
     def time_item_name=(time_item_name)
       @time_item_name = time_item_name
       System.telemetry.packet_and_item(@target_name, @packet_name, @time_item_name)
+    end
+
+    def side=(side)
+      @side = side
     end
 
     protected

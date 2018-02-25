@@ -33,7 +33,7 @@ module Cosmos
     def update_overview(points_plotted, overview_graph)
       @plot.data_objects.each do |data_object|
         begin
-          overview_graph.add_line(data_object.name, data_object.y_values, data_object.time_values, nil, nil, nil, nil, data_object.color, :LEFT, points_plotted) unless data_object.y_values.empty?
+          overview_graph.add_line(data_object.name, data_object.y_values, data_object.time_values, nil, nil, nil, nil, data_object.color, data_object.side, points_plotted) unless data_object.y_values.empty?
         rescue Exception => error
           # Ignore errors in overview graph
           raise error if error.class == NoMemoryError
@@ -49,7 +49,7 @@ module Cosmos
           begin
             x_values = data_object.x_values
             y_values = data_object.y_values
-            self.add_line(data_object.name, y_values, x_values, nil, nil, data_object.y_states, data_object.x_states, data_object.color, :LEFT, points_plotted) unless y_values.empty?
+            self.add_line(data_object.name, y_values, x_values, nil, nil, data_object.y_states, data_object.x_states, data_object.color, data_object.side, points_plotted) unless y_values.empty?
           rescue Exception => error
             raise error if error.class == NoMemoryError
             self.error = error unless self.error
@@ -64,7 +64,7 @@ module Cosmos
               if time_values[0] and time_values[0] >= min_x_value and time_values[0] <= max_x_value
                 x_values = data_object.x_values[range]
                 y_values = data_object.y_values[range]
-                self.add_line(data_object.name, y_values, x_values, nil, nil, data_object.y_states, data_object.x_states, data_object.color, :LEFT, points_plotted) unless y_values.empty?
+                self.add_line(data_object.name, y_values, x_values, nil, nil, data_object.y_states, data_object.x_states, data_object.color, data_object.side, points_plotted) unless y_values.empty?
               end
             rescue Exception => error
               raise error if error.class == NoMemoryError
