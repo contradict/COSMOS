@@ -886,6 +886,18 @@ LINEGRAPH:
       required: false
       description: The type of the value to display. Default is CONVERTED.
       values: <%= %w(RAW CONVERTED FORMATTED WITH_UNITS) %>
+    - name: Y Minimum
+      required: false
+      description: The minimum y-axis value, both min and max must be defined
+      values: .*
+    - name: Y Maximum
+      required: false
+      description: The maximum y-axis value, both min and max must be defined
+      values: .*
+    - name: Y grid line scale
+      required: false
+      description: Space between y grid lines
+      values: .*
 PROGRESSBAR:
   summary: Displays a progress bar that is useful for displaying percentages
   parmeters:

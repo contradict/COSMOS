@@ -17,12 +17,19 @@ module Cosmos
   class LinegraphWidget < LineGraph
     include Widget
 
-    def initialize(parent_layout, target_name, packet_name, item_name, num_samples = 100, width = 300, height = 200, value_type = :CONVERTED)
+    def initialize(parent_layout, target_name, packet_name, item_name, num_samples = 100, width = 300, height = 200, value_type = :CONVERTED,
+                   ymin = nil, ymax = nil, yscale=nil)
       super(target_name, packet_name, item_name, value_type)
       setFixedSize(width.to_i, height.to_i)
       self.title = "#{@target_name} #{@packet_name} #{@item_name}"
       self.show_y_grid_lines = true
       self.unix_epoch_x_values = false
+      if !ymin.nil? and !ymax.nil?
+          self.manual_scale_y(ymin.to_f, ymax.to_f, :LEFT)
+      end
+      if !yscale.nil?
+          self.manual_y_grid_line_scale = yscale.to_f
+      end
       @num_samples = num_samples.to_i
       @data = []
       parent_layout.addWidget(self) if parent_layout
